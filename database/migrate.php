@@ -1,0 +1,134 @@
+<?php
+require __DIR__ . '/../bootstrap.php';
+use Core\Database;
+
+$pdo = Database::pdo();
+
+$queries = [
+// users
+"CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  email VARCHAR(120) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  role ENUM('admin','staff','driver') DEFAULT 'staff',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+"CREATE TABLE IF NOT EXISTS trucks (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  plate VARCHAR(20) UNIQUE NOT NULL,
+  model VARCHAR(120) NULL,
+  capacity_units INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+"CREATE TABLE IF NOT EXISTS drivers (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  phone VARCHAR(30) NULL,
+  license VARCHAR(60) NULL,
+  truck_id INT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (truck_id) REFERENCES trucks(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+"CREATE TABLE IF NOT EXISTS products (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  sku VARCHAR(60) UNIQUE NOT NULL,
+  cylinder_weight_kg DECIMAL(5,2) DEFAULT 0,
+  price DECIMAL(10,2) DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+"CREATE TABLE IF NOT EXISTS routes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  description TEXT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+"CREATE TABLE IF NOT EXISTS schedules (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  route_id INT NOT NULL,
+  day_of_week TINYINT NOT NULL,
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (route_id) REFERENCES routes(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+"CREATE TABLE IF NOT EXISTS purchases (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  date DATE NOT NULL,
+  supplier VARCHAR(120) NULL,
+  driver_id INT NULL,
+  truck_id INT NULL,
+  total DECIMAL(10,2) DEFAULT 0,
+  status ENUM('draft','confirmed','cancelled') DEFAULT 'confirmed',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (driver_id) REFERENCES drivers(id) ON DELETE SET NULL,
+  FOREIGN KEY (truck_id) REFERENCES trucks(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+"CREATE TABLE IF NOT EXISTS purchase_items (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  purchase_id INT NOT NULL,
+  product_id INT NOT NULL,
+  qty INT NOT NULL,
+  unit_cost DECIMAL(10,2) NOT NULL,
+  subtotal DECIMAL(10,2) NOT NULL,
+  FOREIGN KEY (purchase_id) REFERENCES purchases(id) ON DELETE CASCADE,
+  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+"CREATE TABLE IF NOT EXISTS sales (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  date DATE NOT NULL,
+  customer_name VARCHAR(120) NULL,
+  customer_phone VARCHAR(30) NULL,
+  driver_id INT NULL,
+  route_id INT NULL,
+  total DECIMAL(10,2) DEFAULT 0,
+  amount_paid DECIMAL(10,2) DEFAULT 0,
+  balance_due DECIMAL(10,2) DEFAULT 0,
+  status ENUM('pending','paid','cancelled') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (driver_id) REFERENCES drivers(id) ON DELETE SET NULL,
+  FOREIGN KEY (route_id) REFERENCES routes(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+"CREATE TABLE IF NOT EXISTS sale_items (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  sale_id INT NOT NULL,
+  product_id INT NOT NULL,
+  qty INT NOT NULL,
+  unit_price DECIMAL(10,2) NOT NULL,
+  subtotal DECIMAL(10,2) NOT NULL,
+  FOREIGN KEY (sale_id) REFERENCES sales(id) ON DELETE CASCADE,
+  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+"CREATE TABLE IF NOT EXISTS payments (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  sale_id INT NOT NULL,
+  date DATE NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  method ENUM('cash','transfer','qr') DEFAULT 'cash',
+  ref VARCHAR(120) NULL,
+  FOREIGN KEY (sale_id) REFERENCES sales(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+
+"CREATE TABLE IF NOT EXISTS inventory_movements (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  product_id INT NOT NULL,
+  date DATE NOT NULL,
+  type ENUM('purchase','sale','adjustment') NOT NULL,
+  qty INT NOT NULL,
+  ref_table VARCHAR(40) NULL,
+  ref_id INT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+];
+
+foreach ($queries as $sql) { $pdo->exec($sql); }
+echo "Migrations executed.\n";

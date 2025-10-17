@@ -1,0 +1,42 @@
+<?php
+require __DIR__ . '/../bootstrap.php';
+
+use Core\Router;
+use Controllers\HomeController;
+use Controllers\ProductController;
+use Controllers\DriverController;
+use Controllers\TruckController;
+use Controllers\RouteController;
+
+$router = new Router();
+$router->get('/', fn()=> (new HomeController())->index());
+
+$router->get('/products', fn()=> (new ProductController())->index());
+$router->get('/products/create', fn()=> (new ProductController())->create());
+$router->post('/products/store', fn()=> (new ProductController())->store());
+$router->get('/products/edit', fn()=> (new ProductController())->edit());
+$router->post('/products/update', fn()=> (new ProductController())->update());
+$router->post('/products/destroy', fn()=> (new ProductController())->destroy());
+
+$router->get('/drivers', fn()=> (new DriverController())->index());
+$router->get('/drivers/create', fn()=> (new DriverController())->create());
+$router->post('/drivers/store', fn()=> (new DriverController())->store());
+$router->get('/drivers/edit', fn()=> (new DriverController())->edit());
+$router->post('/drivers/update', fn()=> (new DriverController())->update());
+$router->post('/drivers/destroy', fn()=> (new DriverController())->destroy());
+
+$router->get('/trucks', fn()=> (new TruckController())->index());
+$router->get('/trucks/create', fn()=> (new TruckController())->create());
+$router->post('/trucks/store', fn()=> (new TruckController())->store());
+$router->get('/trucks/edit', fn()=> (new TruckController())->edit());
+$router->post('/trucks/update', fn()=> (new TruckController())->update());
+$router->post('/trucks/destroy', fn()=> (new TruckController())->destroy());
+
+$router->get('/routes', fn()=> (new RouteController())->index());
+$router->get('/routes/create', fn()=> (new RouteController())->create());
+$router->post('/routes/store', fn()=> (new RouteController())->store());
+$router->get('/routes/edit', fn()=> (new RouteController())->edit());
+$router->post('/routes/update', fn()=> (new RouteController())->update());
+$router->post('/routes/destroy', fn()=> (new RouteController())->destroy());
+
+$router->dispatch();
