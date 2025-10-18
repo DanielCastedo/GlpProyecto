@@ -85,8 +85,7 @@ $router->post('/payments/destroy', fn()=> (new PaymentController())->destroy());
 $router->get('/sale_items/add_multiple', fn()=> (new SaleItemController())->add_multiple());
 $router->post('/sale_items/store_multiple', fn()=> (new SaleItemController())->store_multiple());
 
-//horario
-
+// ---------- Horarios ----------
 $router->get('/schedules', fn()=> (new ScheduleController())->index());
 $router->get('/schedules/create', fn()=> (new ScheduleController())->create());
 $router->post('/schedules/store', fn()=> (new ScheduleController())->store());

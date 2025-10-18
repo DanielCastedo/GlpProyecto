@@ -35,7 +35,7 @@
   </tbody>
 </table>
 
-<!-- Estilos y JS -->
+<!-- Estilos CSS y JS -->
 <style>
 .table-search-wrap {
   margin-bottom: 16px;

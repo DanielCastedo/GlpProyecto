@@ -5,7 +5,7 @@ use Core\Database;
 $pdo = Database::pdo();
 
 $queries = [
-// users
+
 "CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(120) NOT NULL,
