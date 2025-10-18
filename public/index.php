@@ -13,6 +13,7 @@ use Controllers\SaleItemController;
 use Controllers\ScheduleController;
 use Controllers\PurchaseController;
 use Controllers\PurchaseItemController;
+use Controllers\InventoryMovementController;
 
 $router = new Router();
 $router->get('/', fn()=> (new HomeController())->index());
@@ -95,5 +96,11 @@ $router->post('/purchase_items/store', fn()=> (new PurchaseItemController())->st
 $router->post('/purchase_items/destroy', fn()=> (new PurchaseItemController())->destroy());
 
 
+$router->get('/inventory_movements', fn()=> (new InventoryMovementController())->index());
+$router->get('/inventory_movements/create', fn()=> (new InventoryMovementController())->create());
+$router->post('/inventory_movements/store', fn()=> (new InventoryMovementController())->store());
+$router->get('/inventory_movements/edit', fn()=> (new InventoryMovementController())->edit());
+$router->post('/inventory_movements/update', fn()=> (new InventoryMovementController())->update());
+$router->post('/inventory_movements/destroy', fn()=> (new InventoryMovementController())->destroy());
 
 $router->dispatch();

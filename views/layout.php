@@ -523,6 +523,17 @@ $isActive = function (string $path) use ($current) {
       </a>
 
 
+      <a class="<?= $isActive('/inventory_movements') ?>" href="<?= $base ?>/inventory_movements">
+        <span class="icon" style="vertical-align:middle;">
+          <!-- Icono SVG garrafa/inventario -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <rect x="7" y="4" width="10" height="16" rx="5" fill="#1976d2" />
+            <rect x="9" y="9" width="6" height="7" rx="3" fill="#fff" />
+            <rect x="10" y="2" width="4" height="3" rx="1.5" fill="#1976d2" />
+          </svg>
+        </span>
+        Inventario
+      </a>
     </nav>
   </aside>
 
@@ -548,11 +559,35 @@ $isActive = function (string $path) use ($current) {
     const backdrop = document.getElementById('backdrop');
 
     function isMobile() { return window.innerWidth <= 900; }
+    function isMobile() {
+      return window.innerWidth <= 900;
+    }
 
     function openSidebar() {
       sidebar.classList.add('open');
       backdrop.classList.add('show');
     }
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      backdrop.classList.remove('show');
+    }
+
+    toggle?.addEventListener('click', () => {
+      if (isMobile()) {
+        if (sidebar.classList.contains('open')) closeSidebar();
+        else openSidebar();
+      }
+    });
+
+    // Cerrar al clicar fuera en móvil
+    backdrop.addEventListener('click', closeSidebar);
+
+    // Cerrar con ESC en móvil
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && isMobile()) closeSidebar();
+    });
+
+
     function closeSidebar() {
       sidebar.classList.remove('open');
       backdrop.classList.remove('show');
