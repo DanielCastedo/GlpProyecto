@@ -9,6 +9,6 @@ return [
     'charset' => 'utf8mb4'
   ],
   'app' => [
-    'base_url' => '/glpnuevo/public'
+    'base_url' => '/GasProyecto/GlpProyecto/public'
   ]
 ];
