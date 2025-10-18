@@ -11,7 +11,7 @@ class Controller {
         $viewFile   = __DIR__ . '/../views/' . $view . '.php';
         $layoutFile = __DIR__ . '/../views/layout.php';
 
-        // ✅ No aplicar layout para login ni registro
+        // No aplicar layout para login ni registro
         if (in_array($view, ['auth/login', 'auth/register'])) {
             if (is_file($viewFile)) {
                 include $viewFile;
