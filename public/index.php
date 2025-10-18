@@ -10,6 +10,7 @@ use Controllers\TruckController;
 use Controllers\RouteController;
 use Controllers\SaleController;
 use Controllers\SaleItemController;
+use Controllers\InventoryMovementController;
 
 $router = new Router();
 $router->get('/', fn()=> (new HomeController())->index());
@@ -67,5 +68,12 @@ $router->get('/payments/edit', fn()=> (new PaymentController())->edit());       
 $router->post('/payments/update', fn()=> (new PaymentController())->update());
 $router->post('/payments/destroy', fn()=> (new PaymentController())->destroy());
 
+
+$router->get('/inventory_movements', fn()=> (new InventoryMovementController())->index());
+$router->get('/inventory_movements/create', fn()=> (new InventoryMovementController())->create());
+$router->post('/inventory_movements/store', fn()=> (new InventoryMovementController())->store());
+$router->get('/inventory_movements/edit', fn()=> (new InventoryMovementController())->edit());
+$router->post('/inventory_movements/update', fn()=> (new InventoryMovementController())->update());
+$router->post('/inventory_movements/destroy', fn()=> (new InventoryMovementController())->destroy());
 
 $router->dispatch();

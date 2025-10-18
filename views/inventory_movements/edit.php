@@ -1,29 +1,56 @@
-<a href="<?= $base ?>/products" class="btn btn-back" style="margin-bottom:18px;">
+<a href="<?= $base ?>/inventory_movements" class="btn btn-back" style="margin-bottom:18px;">
   ← Volver
 </a>
 
-<h2 style="margin-bottom:24px;">Nuevo producto</h2>
+<h2 style="margin-bottom:24px;">Editar movimiento #<?= $item['id'] ?></h2>
 
-<form method="post" action="<?= $base ?>/products/store" class="product-new-form">
-  <div class="product-new-grid">
+<form method="post" action="<?= $base ?>/inventory_movements/update" class="inv-edit-form"
+      oninput="if(type.value==='purchase' && qty.valueAsNumber<0){qty.value = Math.abs(qty.valueAsNumber)}
+               if(type.value==='sale' && qty.valueAsNumber>0){qty.value = -Math.abs(qty.valueAsNumber)}">
+  <input type="hidden" name="id" value="<?= $item['id'] ?>">
+
+  <div class="inv-edit-grid">
     <label>
-      <span>Nombre</span>
-      <input name="name" required placeholder="Ej: Garrafa 10kg">
+      <span>Fecha</span>
+      <input type="date" name="date" value="<?= htmlspecialchars($item['date']) ?>" required>
+    </label>
+
+    <label>
+      <span>Producto</span>
+      <select name="product_id" required>
+        <?php foreach ($products as $p): ?>
+          <option value="<?= $p['id'] ?>" <?= $p['id']==$item['product_id']?'selected':'' ?>>
+            <?= htmlspecialchars($p['name']) ?>
+          </option>
+        <?php endforeach; ?>
+      </select>
+    </label>
+
+    <label>
+      <span>Tipo</span>
+      <select name="type" id="type" required>
+        <?php foreach (['purchase','sale','adjustment'] as $t): ?>
+          <option value="<?= $t ?>" <?= $item['type']===$t ? 'selected':'' ?>><?= $t ?></option>
+        <?php endforeach; ?>
+      </select>
+    </label>
+
+    <label>
+      <span>Cantidad</span>
+      <input type="number" name="qty" id="qty" step="1" value="<?= htmlspecialchars($item['qty']) ?>" required>
+    </label>
+
+    <label>
+      <span>Ref. Tabla</span>
+      <input name="ref_table" value="<?= htmlspecialchars($item['ref_table']) ?>">
     </label>
     <label>
-      <span>SKU</span>
-      <input name="sku" required placeholder="Ej: GLP10">
-    </label>
-    <label>
-      <span>Peso cilindro (kg)</span>
-      <input name="cylinder_weight_kg" required type="number" step="0.01" min="0" placeholder="Ej: 10">
-    </label>
-    <label>
-      <span>Precio</span>
-      <input name="price" required type="number" step="0.01" min="0" placeholder="Ej: 150.00">
+      <span>Ref. ID</span>
+      <input type="number" name="ref_id" min="0" value="<?= htmlspecialchars($item['ref_id']) ?>">
     </label>
   </div>
-  <button class="btn btn-primary" type="submit">Guardar</button>
+
+  <button class="btn btn-primary" type="submit">Actualizar</button>
 </form>
 
 <style>
@@ -44,23 +71,23 @@
   background: #1976d2;
   color: #fff;
 }
-.product-new-form {
+.inv-edit-form {
   background: #f5f8fd;
   border-radius: 15px;
   box-shadow: 0 1px 12px rgba(33,150,243,0.08);
   padding: 28px 26px 18px 26px;
-  max-width: 480px;
+  max-width: 600px;
   margin: 0 auto 32px auto;
   display: flex;
   flex-direction: column;
   gap: 22px;
 }
-.product-new-grid {
+.inv-edit-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
-.product-new-form label {
+.inv-edit-form label {
   display: flex;
   flex-direction: column;
   background: #fff;
@@ -72,7 +99,7 @@
   font-weight: 600;
   gap: 6px;
 }
-.product-new-form input {
+.inv-edit-form input, .inv-edit-form select {
   margin-top: 2px;
   padding: 8px 12px;
   border-radius: 7px;
@@ -81,7 +108,7 @@
   background: #f9fcff;
   transition: border-color .18s;
 }
-.product-new-form input:focus {
+.inv-edit-form input:focus, .inv-edit-form select:focus {
   border-color: #1976d2;
   outline: none;
 }
@@ -106,11 +133,11 @@
 
 /* Responsive: móvil/tablet */
 @media (max-width: 900px) {
-  .product-new-form {
+  .inv-edit-form {
     padding: 15px 2vw 14px 2vw;
     max-width: 97vw;
   }
-  .product-new-grid {
+  .inv-edit-grid {
     grid-template-columns: 1fr;
     gap: 14px;
   }
