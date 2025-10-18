@@ -230,7 +230,8 @@ $isActive = function (string $path) use ($current) {
     }
 
     main {
-      width: min(100%, 1040px);
+      width: min(100%, 1800px);
+      /* <-- Cambiado de 1040px a 1400px */
       background: var(--bg-card);
       border-radius: var(--radius);
       box-shadow: var(--shadow-md);
@@ -542,6 +543,9 @@ $isActive = function (string $path) use ($current) {
       <main>
         <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px;">
           <h1 style="font-size:1.25rem;">Panel</h1>
+          <?php
+          date_default_timezone_set('America/La_Paz');
+          ?>
           <div class="muted"><?= date('d/m/Y H:i') ?></div>
         </div>
 
@@ -558,7 +562,10 @@ $isActive = function (string $path) use ($current) {
     const toggle = document.getElementById('sidebarToggle');
     const backdrop = document.getElementById('backdrop');
 
-    function isMobile() { return window.innerWidth <= 900; }
+    function isMobile() {
+      return window.innerWidth <= 900;
+    }
+
     function isMobile() {
       return window.innerWidth <= 900;
     }
@@ -567,6 +574,7 @@ $isActive = function (string $path) use ($current) {
       sidebar.classList.add('open');
       backdrop.classList.add('show');
     }
+
     function closeSidebar() {
       sidebar.classList.remove('open');
       backdrop.classList.remove('show');

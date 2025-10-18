@@ -15,7 +15,17 @@ class SaleController extends Controller
 
     public function index()
     {
-        $items = $this->model->all();
+        $pdo = \Core\Database::pdo();
+        $items = $pdo->query("
+        SELECT 
+            s.*, 
+            d.name AS driver_name, 
+            r.name AS route_name
+        FROM sales s
+        LEFT JOIN drivers d ON d.id = s.driver_id
+        LEFT JOIN routes r ON r.id = s.route_id
+        ORDER BY s.date DESC, s.id DESC
+    ")->fetchAll();
         $this->render('sales/index', compact('items'));
     }
 
