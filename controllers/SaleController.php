@@ -31,11 +31,15 @@ class SaleController extends Controller
         // Default numbers si no vienen
         $_POST['total'] = $_POST['total'] ?? 0;
         $_POST['amount_paid'] = $_POST['amount_paid'] ?? 0;
-        $_POST['balance_due'] = $_POST['balance_due'] ?? 0;
-        $_POST['status'] = $_POST['status'] ?? 'pending';
+        $_POST['balance_due'] = $_POST['balance_due'] ?? ($_POST['total'] - $_POST['amount_paid']);
+
+        // Estado según saldo
+        $total = floatval($_POST['total']);
+        $balance_due = floatval($_POST['balance_due']);
+        $_POST['status'] = ($balance_due == 0 && $total > 0) ? 'completado' : 'pendiente';
 
         $id = $this->model->create($_POST);
-        $this->redirect($this->baseUrl() . '/sales/edit?id=' . $id);
+        $this->redirect($this->baseUrl() . '/sales');
     }
 
     public function edit()
@@ -46,12 +50,21 @@ class SaleController extends Controller
             echo "<p>Venta no encontrada</p>";
             return;
         }
-        $this->render('sales/edit', compact('item'));
+        $drivers = (new \Models\Driver())->all();
+        $routes = (new \Models\Route())->all();
+        $this->render('sales/edit', compact('item', 'drivers', 'routes'));
     }
 
     public function update()
     {
         $id = (int)$_POST['id'];
+
+        // Estado según saldo
+        $total = floatval($_POST['total'] ?? 0);
+        $amount_paid = floatval($_POST['amount_paid'] ?? 0);
+        $balance_due = floatval($_POST['balance_due'] ?? ($total - $amount_paid));
+        $_POST['status'] = ($balance_due == 0 && $total > 0) ? 'completado' : 'pending';
+
         $this->model->update($id, $_POST);
         $this->redirect($this->baseUrl() . '/sales');
     }

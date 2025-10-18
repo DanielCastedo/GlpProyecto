@@ -41,10 +41,6 @@
       </select>
     </label>
     <label>
-      <span>Pagado (monto)</span>
-      <input name="amount_paid" type="number" step="0.01" value="0" required>
-    </label>
-    <label>
       <span>Estado</span>
       <select name="status" required>
         <option value="pending">Pendiente</option>
