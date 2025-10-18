@@ -494,12 +494,98 @@ $isActive = function (string $path) use ($current) {
 </head>
 
 <body>
-  <header class="header">
+    <header class="header">
     <button class="hamburger" id="sidebarToggle" aria-label="Abrir menú">&#9776;</button>
     <div class="brand"><span class="dot"></span> Sistema GLP - Nueva Esperanza</div>
-    <div style="margin-left:auto; display:flex; gap:10px;">
-      <span class="badge">Online</span>
+
+    <!-- Contenedor flexible para empujar el perfil a la derecha -->
+    <div style="flex:1;"></div>
+
+    <!-- Menú de usuario -->
+    <div class="user-menu">
+      <button class="user-btn" onclick="toggleUserMenu()">
+        <span class="user-icon">👤</span>
+        <span class="user-name"><?= htmlspecialchars($_SESSION['user']['name'] ?? 'Invitado') ?></span>
+        <span class="arrow">▼</span>
+      </button>
+
+      <div id="userDropdown" class="dropdown-menu">
+        <a href="<?= $base ?>/profile">⚙️ Perfil</a>
+        <a href="<?= $base ?>/logout" class="logout">🚪 Cerrar sesión</a>
+      </div>
     </div>
+
+    <style>
+      .user-menu {
+        position: relative;
+      }
+      .user-btn {
+        background: transparent;
+        border: none;
+        color: #fff;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 8px;
+        transition: background 0.2s;
+      }
+      .user-btn:hover {
+        background: rgba(255,255,255,0.1);
+      }
+      .user-icon {
+        font-size: 1.2rem;
+      }
+      .arrow {
+        font-size: .8rem;
+        opacity: 0.8;
+      }
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 42px;
+        background: #fff;
+        border-radius: 10px;
+        min-width: 160px;
+        box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+        overflow: hidden;
+        z-index: 100;
+      }
+      .dropdown-menu a {
+        display: block;
+        padding: 10px 14px;
+        text-decoration: none;
+        color: #111;
+        font-size: .95rem;
+        transition: background .15s;
+      }
+      .dropdown-menu a:hover {
+        background: #f3f4f6;
+      }
+      .dropdown-menu a.logout {
+        color: #b91c1c;
+      }
+    </style>
+
+    <script>
+      function toggleUserMenu() {
+        const menu = document.getElementById('userDropdown');
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+      }
+
+      // Cierra el menú si se hace clic fuera
+      document.addEventListener('click', (e) => {
+        const menu = document.getElementById('userDropdown');
+        const btn = document.querySelector('.user-btn');
+        if (!menu || !btn) return;
+        if (!btn.contains(e.target) && !menu.contains(e.target)) {
+          menu.style.display = 'none';
+        }
+      });
+    </script>
   </header>
 
   <!-- Backdrop para móvil -->
