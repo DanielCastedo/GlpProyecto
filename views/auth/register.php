@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Iniciar Sesión - Sistema GLP</title>
+  <title>Crear Cuenta - Sistema GLP</title>
   <style>
     body {
       font-family: 'Segoe UI', Roboto, sans-serif;
@@ -67,7 +67,7 @@
     .login-box button:hover {
       background: #1d4ed8;
     }
-    .login-box .register-link {
+    .login-box .login-link {
       margin-top: 14px;
       display: block;
       font-size: .95rem;
@@ -76,7 +76,7 @@
       font-weight: 600;
       transition: color 0.2s;
     }
-    .login-box .register-link:hover {
+    .login-box .login-link:hover {
       color: #1e40af;
       text-decoration: underline;
     }
@@ -89,42 +89,36 @@
       margin-bottom: 12px;
       font-size: .9rem;
     }
-    footer {
-      position: fixed;
-      bottom: 14px;
-      text-align: center;
-      width: 100%;
-      color: #fff;
-      font-size: .9rem;
-    }
   </style>
 </head>
 <body>
   <div class="login-box">
-    <h2>Iniciar Sesión</h2>
+    <h2>Crear Cuenta</h2>
 
     <?php if (!empty($error)): ?>
       <div class="error"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
 
-    <form method="POST" action="<?= $base ?>/login">
+    <form method="POST" action="<?= $base ?>/register">
       <div class="field">
-        <label for="email">Correo electrónico</label>
-        <input type="email" name="email" id="email" required>
+        <label>Nombre</label>
+        <input type="text" name="name" required>
       </div>
 
       <div class="field">
-        <label for="password">Contraseña</label>
-        <input type="password" name="password" id="password" required>
+        <label>Correo electrónico</label>
+        <input type="email" name="email" required>
       </div>
 
-      <button type="submit">Entrar</button>
+      <div class="field">
+        <label>Contraseña</label>
+        <input type="password" name="password" required>
+      </div>
+
+      <button type="submit">Registrar</button>
     </form>
 
-    <!-- 🔹 Botón para crear cuenta -->
-    <a href="<?= $base ?>/register" class="register-link">¿No tienes cuenta? Crear una nueva</a>
+    <a href="<?= $base ?>/login" class="login-link">¿Ya tienes cuenta? Inicia sesión</a>
   </div>
-
-  <footer>© <?= date('Y') ?> Nueva Esperanza - Sistema GLP</footer>
 </body>
 </html>

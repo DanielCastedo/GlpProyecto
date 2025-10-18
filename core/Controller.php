@@ -8,11 +8,11 @@ class Controller {
         $config = require __DIR__ . '/../config/config.php';
         $base = rtrim($config['app']['base_url'] ?? '', '/');
 
-        $viewFile = __DIR__ . '/../views/' . $view . '.php';
+        $viewFile   = __DIR__ . '/../views/' . $view . '.php';
         $layoutFile = __DIR__ . '/../views/layout.php';
 
-        // Si la vista es el login, no aplicar layout
-        if ($view === 'auth/login') {
+        // ✅ No aplicar layout para login ni registro
+        if (in_array($view, ['auth/login', 'auth/register'])) {
             if (is_file($viewFile)) {
                 include $viewFile;
             } else {
@@ -21,6 +21,7 @@ class Controller {
             return;
         }
 
+        // Si no es login ni registro, aplica layout general
         ob_start();
         if (is_file($viewFile)) {
             include $viewFile;

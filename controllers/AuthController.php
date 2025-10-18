@@ -15,13 +15,15 @@ class AuthController extends Controller {
     }
 
     // Mostrar formulario de login
-    public function loginForm(){
-        if (!empty($_SESSION['user'])) {
-            $this->redirect($this->baseUrl() . '/');
-            exit;
-        }
-        $this->render('auth/login');
+  public function loginForm(){
+    // Solo redirigir si ya está logueado y no está intentando registrarse
+    if (!empty($_SESSION['user'])) {
+        $this->redirect($this->baseUrl() . '/');
+        exit;
     }
+    $this->render('auth/login');
+}
+
 
     // Procesar login
     public function login(){
@@ -89,4 +91,39 @@ class AuthController extends Controller {
 
         $this->redirect($this->baseUrl() . '/profile');
     }
+
+    public function registerForm() {
+    $this->render('auth/register');
+}
+
+public function register() {
+    $name = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $role = $_POST['role'] ?? 'user';
+
+    if (!$name || !$email || !$password) {
+        $error = "Todos los campos son obligatorios.";
+        $this->render('auth/register', compact('error'));
+        return;
+    }
+
+    $userModel = new User();
+    $exists = $userModel->findByEmail($email);
+    if ($exists) {
+        $error = "El correo ya está registrado.";
+        $this->render('auth/register', compact('error'));
+        return;
+    }
+
+    $userModel->create([
+        'name' => $name,
+        'email' => $email,
+        'password_hash' => password_hash($password, PASSWORD_DEFAULT),
+        'role' => $role
+    ]);
+
+    $this->redirect($this->baseUrl() . '/login');
+}
+
 }
