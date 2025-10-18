@@ -36,7 +36,7 @@ class SaleController extends Controller
         // Estado según saldo
         $total = floatval($_POST['total']);
         $balance_due = floatval($_POST['balance_due']);
-        $_POST['status'] = ($balance_due == 0 && $total > 0) ? 'completado' : 'pendiente';
+        $_POST['status'] = ($balance_due == 0 && $total > 0) ? 'paid' : 'pending';
 
         $id = $this->model->create($_POST);
         $this->redirect($this->baseUrl() . '/sales');
