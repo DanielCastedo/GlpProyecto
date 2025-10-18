@@ -10,6 +10,9 @@ use Controllers\TruckController;
 use Controllers\RouteController;
 use Controllers\SaleController;
 use Controllers\SaleItemController;
+use Controllers\ScheduleController;
+use Controllers\PurchaseController;
+use Controllers\PurchaseItemController;
 
 $router = new Router();
 $router->get('/', fn()=> (new HomeController())->index());
@@ -66,6 +69,31 @@ $router->post('/payments/store', fn()=> (new PaymentController())->store());
 $router->get('/payments/edit', fn()=> (new PaymentController())->edit());       // ?id=#
 $router->post('/payments/update', fn()=> (new PaymentController())->update());
 $router->post('/payments/destroy', fn()=> (new PaymentController())->destroy());
+
+
+//horario
+
+$router->get('/schedules', fn()=> (new ScheduleController())->index());
+$router->get('/schedules/create', fn()=> (new ScheduleController())->create());
+$router->post('/schedules/store', fn()=> (new ScheduleController())->store());
+$router->get('/schedules/edit', fn()=> (new ScheduleController())->edit());
+$router->post('/schedules/update', fn()=> (new ScheduleController())->update());
+$router->post('/schedules/destroy', fn()=> (new ScheduleController())->destroy());
+
+
+
+//compras y items
+$router->get('/purchases', fn()=> (new PurchaseController())->index());
+$router->get('/purchases/create', fn()=> (new PurchaseController())->create());
+$router->post('/purchases/store', fn()=> (new PurchaseController())->store());
+$router->get('/purchases/edit', fn()=> (new PurchaseController())->edit());
+$router->post('/purchases/update', fn()=> (new PurchaseController())->update());
+$router->post('/purchases/destroy', fn()=> (new PurchaseController())->destroy());
+$router->post('/purchases/confirm', fn()=> (new PurchaseController())->confirm());
+
+$router->post('/purchase_items/store', fn()=> (new PurchaseItemController())->store());
+$router->post('/purchase_items/destroy', fn()=> (new PurchaseItemController())->destroy());
+
 
 
 $router->dispatch();
