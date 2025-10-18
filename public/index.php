@@ -88,6 +88,16 @@ $router->post('/schedules/store', fn() => (new ScheduleController())->store());
 $router->get('/schedules/edit', fn() => (new ScheduleController())->edit());
 $router->post('/schedules/update', fn() => (new ScheduleController())->update());
 $router->post('/schedules/destroy', fn() => (new ScheduleController())->destroy());
+$router->get('/sale_items/add_multiple', fn()=> (new SaleItemController())->add_multiple());
+$router->post('/sale_items/store_multiple', fn()=> (new SaleItemController())->store_multiple());
+
+// ---------- Horarios ----------
+$router->get('/schedules', fn()=> (new ScheduleController())->index());
+$router->get('/schedules/create', fn()=> (new ScheduleController())->create());
+$router->post('/schedules/store', fn()=> (new ScheduleController())->store());
+$router->get('/schedules/edit', fn()=> (new ScheduleController())->edit());
+$router->post('/schedules/update', fn()=> (new ScheduleController())->update());
+$router->post('/schedules/destroy', fn()=> (new ScheduleController())->destroy());
 
 // ---------- Compras e ítems ----------
 $router->get('/purchases', fn() => (new PurchaseController())->index());
